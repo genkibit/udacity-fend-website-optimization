@@ -9,7 +9,7 @@ The goal of this **[Udacity](https://www.udacity.com/)** project is to optimize 
 
 Link
 ---
-Access the optimized website **[here](http://noel7847.github.io/udacity-fend-project-04/)**.
+Access the optimized website **[here](http://genkibit.github.io/udacity-fend-website-optimization/)**.
 
 
 Testing
@@ -62,3 +62,8 @@ Used services and build tools
 + [HTTP Compression Test](http://www.whatsmyip.org/http-compression-test/)
 + [Kraken](https://kraken.io/)
 + [Grunt](http://gruntjs.com/)
+
+
+License
+---
+Read LICENSE.txt file.
