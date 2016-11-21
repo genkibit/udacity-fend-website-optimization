@@ -1,5 +1,4 @@
-// Comment this out when minify the code.
-// "use strict";
+"use strict";
 
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
@@ -7,7 +6,6 @@ jank-free at 60 frames per second.
 
 There are two major issues in this code that lead to sub-60fps performance. Can
 you spot and fix both?
-
 
 Built into the code, you'll find a few instances of the User Timing API
 (window.performance), which will be console.log()ing frame rate data into the
@@ -18,6 +16,35 @@ Creator:
 Cameron Pittman, Udacity Course Developer
 cameron *at* udacity *dot* com
 */
+
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+// requestAnimationFrame polyfill by Erik Moller. fixes from Paul Irish and Tino Zijdel
+// MIT license
+(function() {
+	var lastTime = 0;
+	var vendors = ['ms', 'moz', 'webkit', 'o'];
+	for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+			window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+			window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] ||
+			window[vendors[x]+'CancelRequestAnimationFrame'];
+	}
+
+	if (!window.requestAnimationFrame)
+			window.requestAnimationFrame = function(callback, element) {
+					var currTime = new Date().getTime();
+					var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+					var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+						timeToCall);
+					lastTime = currTime + timeToCall;
+					return id;
+			};
+
+	if (!window.cancelAnimationFrame)
+			window.cancelAnimationFrame = function(id) {
+					clearTimeout(id);
+			};
+}());
 
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
@@ -475,8 +502,8 @@ var resizePizzas = function(size) {
 		}
 
 		// This loop handles all the repaints.
-		for (var i = 0; i < pizzaContainerNodes.length; i++) {
-			pizzaContainerNodes[i].classList.remove("hidden");
+		for (var j = 0; j < pizzaContainerNodes.length; j++) {
+			pizzaContainerNodes[j].classList.remove("hidden");
 		}
 
 		changingSizes = false;
@@ -549,10 +576,11 @@ var scrolling = false;
 
 // These values are used in both `init` and `updatePositions`
 // to position and animate the bg pizzas.
-var scrollTopValue;
+var lastKnownScrollY;
 var cols = 8;
 var s = 256;
-var items;
+var bgItems;
+var bgItemsLen;
 
 // Holds the swinging pizza image objects.
 var bgPizzas = [];
@@ -563,7 +591,7 @@ var bgNode;
 // the `raF` controlled draw function. This way it can fire off as quickly as it wants and
 // not affect the rate of the reflows and draws, improving the frame rate.
 function onScroll() {
- 	scrollTopValue = document.body.scrollTop;
+ 	lastKnownScrollY = window.scrollY;
 	requestTick();
 }
 
@@ -572,8 +600,8 @@ function onScroll() {
 function requestTick() {
 	if (!scrolling) {
 		window.requestAnimationFrame(updatePositions);
-		scrolling = true;
 	}
+  scrolling = true;
 }
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
@@ -581,17 +609,18 @@ function requestTick() {
 
 // Moves the sliding background pizzas based on scroll position.
 function updatePositions() {
-
 	frame++;
 	window.performance.mark("mark_start_frame");
 
+  var phase;
+  scrolling = false;
+  var curScrollY = lastKnownScrollY;
+  
 	// Updates each bg pizza position.
-  for (var i = 0; i < items.length; i++) {
-    	var phase = Math.sin(scrollTopValue / 1250 + (i % 5));
-  		items[i].style.transform = 'translateX(' + phase  * 100 + 'px)';
+  for (var i = 0; i < bgItemsLen; i++) {
+    phase = Math.sin(curScrollY / 1250 + (i % 5));
+  	bgItems[i].style.transform = 'translateX(' + phase  * 100 + 'px)';
   }
-
-	scrolling = false;
 
 	// User Timing API to the rescue again. Seriously, it's worth learning.
 	// Super easy to create custom metrics.
@@ -605,12 +634,12 @@ function updatePositions() {
 
 // Initializes the sliding pizzas bg.
 function init() {
-
+  
 	// Sets the initial positions of sliding pizzas.
-	scrollTopValue = document.body.scrollTop;
+	var scrollTopValue = document.body.scrollTop;
 
 	// Builds array for each bg Pizza.
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.show = true;
@@ -619,38 +648,27 @@ function init() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    elem.top = (Math.floor(i / cols) * s);
     bgPizzas.push(elem);
   }
 
 	// Appends bg pizzas to node. Limits the visible pizzas to the active window.
 	var bgParent = document.getElementById("movingPizzas1");
 
-	for (var i = 0; i < bgPizzas.length; i++) {
- 		var bgChild = bgPizzas[i];
-
-		if (bgChild.style.left + bgChild.style.width < 0) {
-			bgChild.show = false;
-		}
-
-		if (bgChild.style.left > screenWidth) {
-			bgChild.show = false;
-
-			if (bgChild.style.top > screenHeight) {
-				break;
-			}
-		}
-
+	for (var j = 0; j < bgPizzas.length; j++) {
+ 		var bgChild = bgPizzas[j];
  		bgParent.appendChild(bgChild);
 	}
 
 	// Used in `updatePositions` loop.
-	items = document.querySelectorAll(".mover");
+	bgItems = document.querySelectorAll(".mover");
+  bgItemsLen = bgItems.length;
 
 	// Paints initial pizzas.
-  for (var i = 0; i < items.length; i++) {
-  	if (items[i].show === true) {
-			var phase = Math.sin(scrollTopValue/1250 + (i % 5));
-    	items[i].style.left = items[i].basicLeft + phase * 100 + 'px';
+  for (var k = 0; k < bgItemsLen; k++) {
+  	if (bgItems[k].show === true) {
+			var phase = Math.sin(scrollTopValue/1250 + (k % 5));
+    	bgItems[k].style.left = bgItems[k].basicLeft + phase * 100 + 'px';
     }
   }
 }
