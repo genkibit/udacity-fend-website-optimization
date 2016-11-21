@@ -14,7 +14,7 @@ Access the optimized website **[here](http://genkibit.github.io/udacity-fend-web
 
 Testing
 ---
-The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Test results can be accessed **[here](https://drive.google.com/file/d/0B9fvKmX-nM0UQUZjZTlhSFVpQnc/view?usp=sharing)**.
+The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Results can be accessed **[here](http://genkibit.github.io/udacity-fend-website-optimization/test-results/)**.
 
 
 PageSpeed score of 90 or better (index.html)
@@ -35,13 +35,14 @@ Consistent 60 fps when scrolling (pizza.html)
 ---
 + Separated scroll events from direct draw calls in `updatePositions`
 + Wrapped `updatePositions` in a `requestAnimationFrame`
-+ Used canvas element for moving pizzas background (main_canvas.js)
++ Used canvas element for animating background (main_canvas.js)
 + Refactored DOM-abusing code in `updatePositions` with canvas code
 + Placed layout updates and draw calls in separate loops to reduce reflow-repaint cycles
 + Restricted rendering of content to the dimensions of the screen
-+ Reduced the number of background pizzas to 100 from 200
++ Reduced the number of background pizzas to 50 from 200
 + Compressed pizza.png
 + Used css `transform` rule (main_transform.js)
++ Applied the translateZ(0) hack to force GPU usage
 
 
 Bringing pizza resize time to under 5 ms (pizza.html)
@@ -66,4 +67,4 @@ Used services and build tools
 
 License
 ---
-Read LICENSE.txt file.
+Code provided under an **[MIT license](https://github.com/genkibit/udacity-fend-website-optimization/blob/gh-pages/LICENSE.md)**
