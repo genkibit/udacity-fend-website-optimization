@@ -40,6 +40,12 @@
 				position: fixed;
 				width: 256px;
 				z-index: -1;
+				-webkit-transform: translateZ(0);
+				-moz-transform: translateZ(0);
+				-ms-transform: translateZ(0);
+				-o-transform: translateZ(0);
+				transform: translateZ(0);
+				will-change: transform;
 			}
 
 			.randomPizzaContainer {
@@ -66,13 +72,19 @@
 				position: fixed;
 				z-index: -1;
 				left: 0;
-				top; 0;
+				top: 0;
 			}
 			.canvas {
-				position: absolute;
+				position: fixed;
 				z-index: -1;
 				left: 0;
-				top; 0;
+				top: 0;
+				-webkit-transform: translateZ(0);
+				-moz-transform: translateZ(0);
+				-ms-transform: translateZ(0);
+				-o-transform: translateZ(0);
+				transform: translateZ(0);
+				will-change: transform;
 			}
 		</style>
 		<title>Cam's Pizzeria</title>
@@ -211,9 +223,9 @@
 			<div id="footer" class="col-md-12">Thanks for visiting! &copy; 2014 Udacity</div>
 		</div>
 		<script src="js/resources.js"></script>
-<!-- 		<script type="text/javascript" src="js/main_canvas.js"></script> -->
-<!-- 		<script type="text/javascript" src="js/main_transform.js"></script> -->
+ 		<!--<script type="text/javascript" src="js/main_canvas.js"></script> -->
+ 		<!--<script type="text/javascript" src="js/main_transform.js"></script> -->
 		<script type="text/javascript" src="js/main_canvas.min.js"></script>
-<!-- 		<script type="text/javascript" src="js/main_transform.min.js"></script> -->
+ 		<!--<script type="text/javascript" src="js/main_transform.min.js"></script> -->
 	</body>
 </html>
