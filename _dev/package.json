@@ -1,9 +1,8 @@
 {
-  "name": "website-optimization",
+  "name": "website-optimization-project",
+  "version": "2.0.0",
   "description": "Udacity Project 4: Website Optimization Project",
-  "version": "1.0.0",
-  "private": true,
-  "author": "Noel Noche",
+  "dependencies": {},
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
@@ -13,5 +12,11 @@
     "grunt-contrib-htmlmin": "^2.0.0",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/genkibit/udacity-fend-website-optimization"
+  },
+  "author": "Noel Noche < contact@hellonoel.com >",
+  "license": "MIT"
 }
