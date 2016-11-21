@@ -58,7 +58,6 @@ Used services and build tools
 ---
 + [Chrome Developer Tools](https://developer.chrome.com/home/devtools-pillar)
 + [Google PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/)
-+ [GoogleDocs](https://www.google.com/docs/about/)
 + [WebPageTest](http://www.webpagetest.org/)
 + [HTTP Compression Test](http://www.whatsmyip.org/http-compression-test/)
 + [Kraken](https://kraken.io/)
