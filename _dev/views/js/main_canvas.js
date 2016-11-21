@@ -1,5 +1,4 @@
-// Comment this out when minify the code.
-// "use strict";
+"use strict";
 
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
@@ -7,7 +6,6 @@ jank-free at 60 frames per second.
 
 There are two major issues in this code that lead to sub-60fps performance. Can
 you spot and fix both?
-
 
 Built into the code, you'll find a few instances of the User Timing API
 (window.performance), which will be console.log()ing frame rate data into the
@@ -475,8 +473,8 @@ var resizePizzas = function(size) {
 		}
 
 		// This loop handles all the repaints.
-		for (var i = 0; i < pizzaContainerNodes.length; i++) {
-			pizzaContainerNodes[i].classList.remove("hidden");
+		for (var j = 0; j < pizzaContainerNodes.length; j++) {
+			pizzaContainerNodes[j].classList.remove("hidden");
 		}
 
 		changingSizes = false;
@@ -587,28 +585,36 @@ cnv.className = "canvas";
 // We want the canvas to fill the whole screen.
 cnv.width = screenWidth;
 cnv.height = screenHeight;
-
 cnvContainer.appendChild(cnv);
 bodyNode.insertBefore(cnvContainer, containerNode);
+
+// Our pre-render canvas for improved performance.
+var cnv2 = document.createElement("canvas");
+var ctx2 = cnv2.getContext("2d");
+cnv2.width = screenWidth;
+cnv2.height = screenHeight;
+
 
 // Toggles the `raF`loop execution.
 var scrolling = false;
 
 // These values are used in both `init` and `updatePositions`
-// to position and animate the bg pizzas.
-var scrollTopValue;
+// to position and animate the background pizzas Array.
+var lastScrollVal;
 var cols = 11;
 var s = 275;
 
 // Holds the swinging pizza image objects.
-var bgPizzas = [];
+var bgArray = [];
+var bgArrayLen;
+
 
 // Grabs the last scroll y-value. Rather than attaching our scroll events directly to
 // our draw call in `updatePositions`, we put it in its own separate function, outside
 // the `raF` controlled draw function. This way it can fire off as quickly as it wants and
 // not affect the rate of the reflows and draws, improving the frame rate.
 function onScroll() {
- 	scrollTopValue = document.body.scrollTop;
+ 	lastScrollVal = document.body.scrollTop;
 	requestTick();
 }
 
@@ -617,7 +623,29 @@ function onScroll() {
 function requestTick() {
 	if (!scrolling) {
 		window.requestAnimationFrame(updatePositions);
-		scrolling = true;
+	}
+  scrolling = true;
+}
+
+// Calculates pizza positions.
+function calculateLoop() {
+  var curScrollVal = lastScrollVal;
+
+	for (var i = 0; i < bgArrayLen; i++) {
+		var phase = Math.sin(curScrollVal/1250 + (i % 5));
+		var basicLeft = (i % cols) * s;
+		bgArray[i].x = basicLeft + 115 * phase;
+	}
+}
+
+// Draws the background animation.
+function paintLoop() {
+  ctx.clearRect(0,0, screenWidth, screenHeight);
+
+	for (var i = 0; i < bgArrayLen; i++) {
+		if (bgArray[i].img !== null) {
+			bgArray[i].draw();
+		}
 	}
 }
 
@@ -626,26 +654,19 @@ function requestTick() {
 
 // Moves the sliding background pizzas based on scroll position.
 function updatePositions() {
-
 	frame++;
 	window.performance.mark("mark_start_frame");
 
-	// Refactored Ilya's code for canvas, and organized it into calculate and draw loops.
-	ctx.clearRect(0,0, screenWidth, screenHeight);
+  // Reset scroll status and take next scroll event.
+  scrolling = false;
 
-	for (var i = 0; i < bgPizzas.length; i++) {
-		var phase = Math.sin(scrollTopValue/1250 + (i % 5));
-		var basicLeft = (i % cols) * s;
-		bgPizzas[i].x = basicLeft + 115 * phase;
-	}
+	// Refactored Ilya's code for canvas, and organized it into calculate and paint loops.
+  calculateLoop();
+  paintLoop();
 
-	for (var i = 0; i < bgPizzas.length; i++) {
-		if (bgPizzas[i].img !== null) {
-			bgPizzas[i].draw();
-		}
-	}
-
-	scrolling = false;
+  // Draw on main canvas and clear pre-render canvas.
+  ctx.drawImage(cnv2, 0, 0);
+  ctx2.clearRect(0, 0, screenWidth, screenHeight);
 
 	// User Timing API to the rescue again. Seriously, it's worth learning.
 	// Super easy to create custom metrics.
@@ -661,11 +682,11 @@ function updatePositions() {
 function init() {
 
 	// Sets the initial positions of sliding pizzas.
-	scrollTopValue = document.body.scrollTop;
+	var scrollTopValue = document.body.scrollTop;
 
 	// Constructor for Pizza Image Objects.
 	var Pizza = function() {
-		this.sprite = "images/pizza.png";
+    this.sprite = Resources.get("images/pizza.png");
 		this.x = 0;
 		this.y = 0;
 		this.width = 73.333;
@@ -674,7 +695,7 @@ function init() {
 
 	Pizza.prototype = {
 		draw: function() {
-			ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.width, this.height);
+			ctx2.drawImage(this.sprite, this.x, this.y, this.width, this.height);
 		}
 	};
 
@@ -682,12 +703,14 @@ function init() {
 	// of the canvas (which is equal to the browser window dimensions). I cut the
 	// number of pizzas to 100 from 200; that should be enough for most displays.
 	var yInc = 0;
-	for (var i = 0; i < 100; i++) {
+
+	for (var i = 0; i < 50; i++) {
 		var phase = Math.sin(scrollTopValue/1250 + (i % 5));
 		var basicLeft = (i % cols) * s;
 		var p = new Pizza();
+    
 		p.x = basicLeft + 115 * phase;
-		p.y += yInc;
+		p.y = yInc;
 
 		if (p.x > 2040) {
 
@@ -704,15 +727,21 @@ function init() {
 			}
 		}
 
-		bgPizzas.push(p);
+		bgArray.push(p);
 	}
 
+  // Get length for all bgArray for-loops.
+  bgArrayLen = bgArray.length;
+
 	// Renders the initial bg pizzas.
-	for (var i = 0; i < bgPizzas.length; i++) {
-		if (bgPizzas[i].img !== null) {
-			bgPizzas[i].draw();
+	for (var j = 0; j < bgArrayLen; j++) {
+		if (bgArray[j].img !== null) {
+			bgArray[j].draw();
 		}
 	}
+
+  ctx.drawImage(cnv2, 0, 0);
+  ctx2.clearRect(0, 0, screenWidth, screenHeight);
 }
 
 // Generates the sliding pizzas when the page loads.
