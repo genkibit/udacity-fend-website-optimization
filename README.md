@@ -9,12 +9,12 @@ The goal of this **[Udacity](https://www.udacity.com/)** project is to optimize 
 
 Link
 ---
-Access the optimized website **[here](http://genkibit.github.io/udacity-fend-website-optimization/)**.
+Access the optimized website **[here](http://noelnoche.github.io/udacity-fend-website-optimization/)**.
 
 
 Testing
 ---
-The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Results can be accessed **[here](http://genkibit.github.io/udacity-fend-website-optimization/test-results/)**.
+The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Results can be accessed **[here](http://noelnoche.github.io/udacity-fend-website-optimization/test-results/)**.
 
 
 PageSpeed score of 90 or better (index.html)
@@ -66,4 +66,4 @@ Used services and build tools
 
 License
 ---
-Code provided under an **[MIT license](https://github.com/genkibit/udacity-fend-website-optimization/blob/gh-pages/LICENSE.md)**
+Code provided under an **[MIT license](https://github.com/noelnoche/udacity-fend-website-optimization/blob/gh-pages/LICENSE.md)**
