@@ -2,19 +2,22 @@ Website Optimization Project
 ===
 <br>
 
+
 Synopsis
 ---
-The goal of this **[Udacity](https://www.udacity.com/)** project is to optimize a website using techniques and tools that improve page loading speed and animation frame rates (details to follow). Following the Udacity's project rubric, optimizations were made to the index.html file and main.js file in the GitHub repo located **[here](https://github.com/udacity/frontend-nanodegree-mobile-portfolio)**.
+The goal of this project is to optimize a website using techniques and tools that improve page 
+loading speed and animation frame rates. Using [this rubric](), optimizations were made to 
+the index.html file and main.js file in the GitHub repo located [here](https://github.com/udacity/frontend-nanodegree-mobile-portfolio).
 
 
-Link
+App Link
 ---
-Access the optimized website **[here](http://noelnoche.github.io/udacity-fend-website-optimization/)**.
+http://noelnoche.github.io/udacity-fend-website-optimization/
 
 
 Testing
 ---
-The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Results can be accessed **[here](http://noelnoche.github.io/udacity-fend-website-optimization/test-results/)**.
+The original and optimized portfolios were compared using Google PageSpeed and Chrome Developer Tools. Results can be found [here](http://noelnoche.github.io/udacity-fend-website-optimization/test-results/).
 
 
 PageSpeed score of 90 or better (index.html)
@@ -66,4 +69,4 @@ Used services and build tools
 
 License
 ---
-Code provided under an **[MIT license](https://github.com/noelnoche/udacity-fend-website-optimization/blob/gh-pages/LICENSE.md)**
+Code provided under an [MIT license](https://github.com/noelnoche/udacity-fend-website-optimization/blob/gh-pages/LICENSE.md)
