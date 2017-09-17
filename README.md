@@ -12,7 +12,7 @@ the index.html file and main.js file in the GitHub repo located [here](https://g
 
 App Link
 ---
-http://noelnoche.github.io/udacity-fend-website-optimization/
+http://noelnoche.github.io/udacity-fend-website-optimization
 
 
 Testing
