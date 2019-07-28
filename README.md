@@ -24,7 +24,7 @@ Testing
 Performace is measured using Google PageSpeed and Chrome Developer Tools.  
 View the results from the following link:
 
-**<http://noelnoche.github.io/udacity-fend-website-optimization/test-results/>**
+**<https://noelnoche.github.io/udacity-fend-website-optimization/test-results/>**
 
 
 PageSpeed score of 90 or better (index.html)
